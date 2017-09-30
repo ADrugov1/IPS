@@ -1,3 +1,4 @@
+#include <iostream>
 #include <cilk/cilk.h>
 #include <cilk/cilk_api.h>
 #include <cilk/reducer_max.h>
@@ -5,7 +6,9 @@
 #include <cilk/reducer_vector.h>
 #include <chrono>
 
+
 using namespace std::chrono;
+using namespace std;
 
 /// Функция ReducerMinTest() определяет минимальный элемент массива,
 /// переданного ей в качестве аргумента, и его позицию
@@ -62,7 +65,7 @@ int main()
 	__cilkrts_set_param("nworkers", "4");
 
 	long i;
-	const long mass_size = 10000;
+	const long mass_size = 500000;
 	int *mass_begin, *mass_end;
 	int *mass = new int[mass_size]; 
 
@@ -73,10 +76,24 @@ int main()
 	
 	mass_begin = mass;
 	mass_end = mass_begin + mass_size;
+
+	cout << "Massive size is: " << mass_size << " elements\n" << endl;
+
 	ReducerMinTest(mass, mass_size);
+	ReducerMaxTest(mass, mass_size);
+
+	high_resolution_clock::time_point t1 = high_resolution_clock::now();
 
 	ParallelSort(mass_begin, mass_end);
+
+	high_resolution_clock::time_point t2 = high_resolution_clock::now();
+
+	duration<double> duration = (t2 - t1);
+
+	cout << "Duration is: " << duration.count() << " seconds\n" << endl;
+
 	ReducerMinTest(mass, mass_size);
+	ReducerMaxTest(mass, mass_size);
 
 	delete[]mass;
 	return 0;
