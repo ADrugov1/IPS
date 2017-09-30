@@ -56,9 +56,48 @@ void ParallelSort(int *begin, int *end)
 	}
 }
 
+void CompareForAndCilk_For(size_t size) 
+{
+	cout << "Vectors size is: " << size << " elements\n" << endl;
+
+	srand((unsigned)time(0));
+
+	vector<int> vector;
+	cilk::reducer<cilk::op_vector<int>>red_vector;
+
+	high_resolution_clock::time_point t1 = high_resolution_clock::now();
+
+	for (int i = 0; i < size;  ++i)
+	{
+		vector.push_back(rand() % 20000 + 1);
+	}
+	
+	high_resolution_clock::time_point t2 = high_resolution_clock::now();
+
+	cilk_for(int i = 0; i < size; ++i)
+	{
+		red_vector->push_back(rand() % 20000 + 1);
+	}
+
+	high_resolution_clock::time_point t3 = high_resolution_clock::now();
+
+	duration<double> for_duration = (t2 - t1);
+	duration<double> cilk_for_duration = (t3 - t2);
+
+	cout << "For duration is: " << for_duration.count() << " seconds\n" << endl;
+	cout << "Cilk_for duration is: " << cilk_for_duration.count() << " seconds\n" << endl;
+	cout << endl; // форматирование вывода
+}
+
 
 int main()
 {
+	
+
+	// Код для выполнения пунктов 1,2 и 3 -------------------------------------------
+	
+	/*
+
 	srand((unsigned)time(0));
 
 	// устанавливаем количество работающих потоков = 4
@@ -96,5 +135,21 @@ int main()
 	ReducerMaxTest(mass, mass_size);
 
 	delete[]mass;
-	return 0;
+
+	*/
+
+	// Код для выполнения пункта 4 ------------------------------------------------
+	
+	__cilkrts_set_param("nworkers", "4");
+
+	CompareForAndCilk_For(1000000);
+	CompareForAndCilk_For(100000);
+	CompareForAndCilk_For(10000);
+	CompareForAndCilk_For(1000);
+	CompareForAndCilk_For(500);
+	CompareForAndCilk_For(100);
+	CompareForAndCilk_For(50);
+	CompareForAndCilk_For(10);
+
+ 	return 0;
 }
