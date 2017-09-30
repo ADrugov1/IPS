@@ -1,0 +1,20 @@
+﻿Сборка начата 30.09.2017 9:49:00.
+     1>Проект "D:\IPS\IPS_Lab_1\IPS_Lab_1\IPS_Lab_1.vcxproj" в узле 2 (целевые объекты Build).
+     1>ClCompile:
+         C:\Program Files (x86)\IntelSWTools\compilers_and_libraries_2018\windows\bin\intel64\icl.exe /c /Qm32 /I"C:\Program Files (x86)\IntelSWTools\compilers_and_libraries_2018.0.124\windows\compiler\include" /ZI /nologo /W3 /Od /D __INTEL_COMPILER=1800 /D _MBCS /EHsc /RTC1 /MDd /GS /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc140.pdb" /Gd /TP task_for_lecture2.cpp
+         task_for_lecture2.cpp
+     1>task_for_lecture2.cpp(17): warning #3947: "_Cilk_for" has been deprecated, and will be removed in a future release.  Please refer to release notes for details and recommended alternatives
+           	cilk_for(long i = 0; i < size; ++i)
+           	^
+         
+     1>task_for_lecture2.cpp(35): warning #3946: "_Cilk_spawn" has been deprecated, and will be removed in a future release.  Please refer to release notes for details and recommended alternatives
+           		cilk_spawn ParallelSort(begin, middle);
+           		^
+         
+       Link:
+         C:\Program Files (x86)\IntelSWTools\compilers_and_libraries_2018\windows\bin\intel64\xilink.exe -qm32 /OUT:"D:\IPS\IPS_Lab_1\Debug\IPS_Lab_1.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /manifest:embed /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /DEBUG /PDB:"D:\IPS\IPS_Lab_1\Debug\IPS_Lab_1.pdb" /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:\IPS\IPS_Lab_1\Debug\IPS_Lab_1.lib" /MACHINE:X86 Debug\task_for_lecture2.obj
+     1>Сборка проекта "D:\IPS\IPS_Lab_1\IPS_Lab_1\IPS_Lab_1.vcxproj" завершена (целевые объекты Build).
+
+Сборка успешно завершена.
+
+Затраченное время: 00:00:01.31
