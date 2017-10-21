@@ -1,0 +1,29 @@
+
+=== Start: [2017/10/21 11:01:02] === 
+Analysis started...
+Result file: D:\IPS\IPS_Lab_2\IPS_Lab_2\My Inspector Results - IPS_Lab_2\r006ti3\r006ti3.inspxe 
+Found target process d:\ips\ips_lab_2\debug\ips_lab_2.exe (PID = 4888). Analysis started... 
+Loaded module: d:\ips\ips_lab_2\debug\ips_lab_2.exe. 
+Loaded module: c:\windows\syswow64\kernelbase.dll. 
+Loaded module: c:\windows\syswow64\kernel32.dll. 
+Loaded module: c:\windows\syswow64\ntdll.dll. 
+Loaded module: c:\windows\syswow64\msvcp140d.dll. 
+Loaded module: c:\program files (x86)\intelswtools\compilers_and_libraries_2018.0.124\windows\redist\ia32_win\compiler\cilkrts20.dll. 
+Loaded module: c:\windows\syswow64\vcruntime140d.dll. 
+Loaded module: c:\windows\syswow64\ucrtbased.dll. 
+Loaded module: c:\windows\syswow64\user32.dll. 
+Loaded module: c:\windows\syswow64\advapi32.dll. 
+Loaded module: c:\windows\syswow64\gdi32.dll. 
+Loaded module: c:\windows\syswow64\msvcrt.dll. 
+Loaded module: c:\windows\syswow64\sechost.dll. 
+Loaded module: c:\windows\syswow64\rpcrt4.dll. 
+Loaded module: c:\windows\syswow64\cryptbase.dll. 
+Loaded module: c:\windows\syswow64\sspicli.dll. 
+Loaded module: c:\windows\syswow64\bcryptprimitives.dll. 
+Loaded module: c:\windows\syswow64\imm32.dll. 
+Loaded module: c:\windows\syswow64\msctf.dll. 
+Loaded module: c:\program files (x86)\intelswtools\inspector 2018\bin32\runtime\libittnotify.dll. 
+Application exit code: 1 
+Result file: D:\IPS\IPS_Lab_2\IPS_Lab_2\My Inspector Results - IPS_Lab_2\r006ti3\r006ti3.inspxe 
+Analysis canceled by user
+=== End: [2017/10/21 11:01:54] === 

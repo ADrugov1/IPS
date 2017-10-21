@@ -1,0 +1,122 @@
+9687	_main:
+9687	push ebp
+9688	mov ebp, esp
+9690	sub esp, 0x30
+9693	push eax
+9694	push edi
+9695	push ecx
+9696	lea edi, ptr [ebp-0x30]
+9699	mov ecx, 0xc
+9704	mov eax, 0xcccccccc
+9709	rep stosd dword ptr [edi]
+9711	pop ecx
+9712	pop edi
+9713	pop eax
+9714	mov byte ptr [ebp-0x2a], 0x0
+9718	mov byte ptr [ebp-0x2b], 0x0
+9722	mov byte ptr [ebp-0x2c], 0x0
+9726	mov byte ptr [ebp-0x29], 0x0
+9730	mov dword ptr [esp], 0x0
+9737	call 0x19d0 <time>
+9742	mov dword ptr [ebp-0x8], eax
+9745	mov dword ptr [ebp-0x4], edx
+9748	add esp, 0x4
+9751	push eax
+9752	mov eax, dword ptr [ebp-0x8]
+9755	mov dword ptr [esp], eax
+9758	mov eax, dword ptr [0x410234]
+9763	call eax
+9765	add esp, 0x4
+9768	mov byte ptr [ebp-0x2c], 0x1
+9772	mov dword ptr [ebp-0x28], 0x5dc
+9779	push eax
+9780	mov dword ptr [esp], 0x1770
+9787	call 0x1325 <@ILT+320(??_U@YAPAXI@Z)>
+9792	mov dword ptr [ebp-0x24], eax
+9795	add esp, 0x4
+9798	mov byte ptr [ebp-0x2b], 0x1
+9802	mov eax, dword ptr [ebp-0x24]
+9805	mov dword ptr [ebp-0x20], eax
+9808	push eax
+9809	mov dword ptr [esp], 0x2ee0
+9816	call 0x1325 <@ILT+320(??_U@YAPAXI@Z)>
+9821	mov dword ptr [ebp-0x1c], eax
+9824	add esp, 0x4
+9827	mov byte ptr [ebp-0x2a], 0x1
+9831	mov eax, dword ptr [ebp-0x1c]
+9834	mov dword ptr [ebp-0x18], eax
+9837	push eax
+9838	mov eax, dword ptr [ebp-0x20]
+9841	mov dword ptr [esp], eax
+9844	call 0x1a13 <?InitMatrix@@YAXPAPAN@Z>
+9849	add esp, 0x4
+9852	add esp, 0xfffffff4
+9855	mov eax, dword ptr [ebp-0x20]
+9858	mov dword ptr [esp], eax
+9861	mov dword ptr [esp+0x4], 0x5dc
+9869	mov eax, dword ptr [ebp-0x18]
+9872	mov dword ptr [esp+0x8], eax
+9876	call 0x1e79 <?SerialParallelGaussMethod@@YAXPAPANHPAN@Z>
+9881	add esp, 0xc
+9884	mov byte ptr [ebp-0x29], 0x1
+9888	mov dword ptr [ebp-0x14], 0x0
+9895	mov eax, dword ptr [ebp-0x14]
+9898	cmp eax, 0x5dc
+9903	jl 0x26c4
+9905	jmp 0x26e7
+9907	mov byte ptr [ebp-0x29], 0x1
+9911	mov eax, 0x1
+9916	add eax, dword ptr [ebp-0x14]
+9919	mov dword ptr [ebp-0x14], eax
+9922	jmp 0x26a7
+9924	add esp, 0xfffffff8
+9927	mov eax, dword ptr [ebp-0x14]
+9930	imul eax, eax, 0x4
+9933	add eax, dword ptr [ebp-0x20]
+9936	mov eax, dword ptr [eax]
+9938	mov dword ptr [esp], eax
+9941	mov dword ptr [esp+0x4], 0x8
+9949	call 0x1028 <@ILT+23(??_V@YAXPAXI@Z)>
+9954	add esp, 0x8
+9957	jmp 0x26b3
+9959	push eax
+9960	mov dword ptr [esp], 0x41265e
+9967	call 0x13ca <@ILT+3c5(_printf)>
+9972	mov dword ptr [ebp-0x10], eax
+9975	add esp, 0x4
+9978	mov byte ptr [ebp-0x29], 0x1
+9982	mov dword ptr [ebp-0x14], 0x0
+9989	mov eax, dword ptr [ebp-0x14]
+9992	cmp eax, 0x5dc
+9997	jl 0x2722
+9999	jmp 0x2753
+10001	mov byte ptr [ebp-0x29], 0x1
+10005	mov eax, 0x1
+10010	add eax, dword ptr [ebp-0x14]
+10013	mov dword ptr [ebp-0x14], eax
+10016	jmp 0x2705
+10018	add esp, 0xfffffff0
+10021	mov dword ptr [esp], 0x412669
+10028	mov eax, dword ptr [ebp-0x14]
+10031	mov dword ptr [esp+0x4], eax
+10035	mov eax, dword ptr [ebp-0x14]
+10038	imul eax, eax, 0x8
+10041	add eax, dword ptr [ebp-0x18]
+10044	movsd xmm0, qword ptr [eax]
+10048	movsd qword ptr [esp+0x8], xmm0
+10054	call 0x13ca <@ILT+3c5(_printf)>
+10059	mov dword ptr [ebp-0xc], eax
+10062	add esp, 0x10
+10065	jmp 0x2711
+10067	add esp, 0xfffffff8
+10070	mov eax, dword ptr [ebp-0x18]
+10073	mov dword ptr [esp], eax
+10076	mov dword ptr [esp+0x4], 0x8
+10084	call 0x1028 <@ILT+23(??_V@YAXPAXI@Z)>
+10089	add esp, 0x8
+10092	mov eax, 0x0
+10097	add esp, 0x2c
+10100	cmp ebp, esp
+10102	call 0x1168 <@ILT+163(__RTC_CheckEsp)>
+10107	leave 
+10108	ret 
