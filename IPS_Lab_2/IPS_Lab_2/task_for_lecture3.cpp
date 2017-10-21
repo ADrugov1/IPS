@@ -79,19 +79,64 @@ void SerialGaussMethod( double **matrix, const int rows, double* result )
 	}
 }
 
+void SerialParallelGaussMethod(double **matrix, const int rows, double* result)
+{
+	int k;
+	double koef;
+
+	high_resolution_clock::time_point t1 = high_resolution_clock::now();
+
+	// прямой ход метода Гаусса
+	for (k = 0; k < rows; ++k)
+	{
+		//
+		cilk_for(int i = k + 1; i < rows; ++i)
+		{
+			koef = -matrix[i][k] / matrix[k][k];
+
+			for(int j = k; j <= rows; ++j)
+			{
+				matrix[i][j] += koef * matrix[k][j];
+			}
+		}
+	}
+
+	high_resolution_clock::time_point t2 = high_resolution_clock::now();
+
+	duration<double> direct_motion_duration = (t2 - t1);
+
+	cout << "Direct motion duration is: " << direct_motion_duration.count() << " seconds\n" << endl;
+
+	// обратный ход метода Гаусса
+	result[rows - 1] = matrix[rows - 1][rows] / matrix[rows - 1][rows - 1];
+
+	for (k = rows - 2; k >= 0; --k)
+	{
+		result[k] = matrix[k][rows];
+
+		//
+		cilk_for (int j = k + 1; j < rows; ++j)
+		{
+			result[k] -= matrix[k][j] * result[j];
+		}
+
+		result[k] /= matrix[k][k];
+	}
+}
 
 int main()
 {
 	srand( (unsigned) time( 0 ) );
 
 	int i;
-
+	
 	const int test_matrix_lines = MATRIX_SIZE;
 	double **test_matrix = new double*[test_matrix_lines];
 	double *result = new double[test_matrix_lines];
+	InitMatrix(test_matrix);
+	
 
-
-	/*
+		/*
 	// кол-во строк в матрице, приводимой в качестве примера
 	const int test_matrix_lines = 4;
 
@@ -113,9 +158,7 @@ int main()
 	test_matrix[2][0] = 2; test_matrix[2][1] = 10; test_matrix[2][2] = 9;  test_matrix[2][3] = 7;  test_matrix[2][4] = 40;
 	test_matrix[3][0] = 3; test_matrix[3][1] = 8;  test_matrix[3][2] = 9;  test_matrix[3][3] = 2;  test_matrix[3][4] = 37;
 	*/
-	InitMatrix(test_matrix);
-
-	SerialGaussMethod( test_matrix, test_matrix_lines, result );
+	SerialParallelGaussMethod( test_matrix, test_matrix_lines, result );
 
 	for ( i = 0; i < test_matrix_lines; ++i )
 	{

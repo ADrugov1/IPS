@@ -1,0 +1,14 @@
+-r
+D:\IPS\IPS_Lab_2\IPS_Lab_2\My Amplifier Results - IPS_Lab_2\r000hs
+--stack-stitching
+--data-limit-mb=500
+--disk-space-limit=100
+--mrte-type=java,dotnet,python
+--itt-config=frame
+--stackwalk=offline
+--mrte-mode=auto
+--type=cpu:counters:nostack
+--type=cpu:stack
+--interval=10
+--
+D:\IPS\IPS_Lab_2\Debug\IPS_Lab_2.exe
