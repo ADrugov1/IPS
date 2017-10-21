@@ -34,7 +34,7 @@ void InitMatrix( double** matrix )
 /// последний столбей матрицы - значения правых частей уравнений
 /// rows - количество строк в исходной матрице
 /// result - массив ответов СЛАУ
-void SerialGaussMethod( double **matrix, const int rows, double* result )
+double SerialGaussMethod( double **matrix, const int rows, double* result )
 {
 	int k;
 	double koef;
@@ -77,10 +77,11 @@ void SerialGaussMethod( double **matrix, const int rows, double* result )
 
 		result[k] /= matrix[k][k];
 	}
+	return direct_motion_duration.count();
 }
 
 
-void SerialParallelGaussMethod(double **matrix, const int rows, double* result)
+double SerialParallelGaussMethod(double **matrix, const int rows, double* result)
 {
 	int k;
 	double koef;
@@ -91,11 +92,11 @@ void SerialParallelGaussMethod(double **matrix, const int rows, double* result)
 	for (int k = 0; k < rows; ++k)
 	{
 		//
-		for(int i = k + 1; i < rows; ++i)
+		cilk_for(int i = k + 1; i < rows; ++i)
 		{
 			koef = -matrix[i][k] / matrix[k][k];
 
-			cilk_for(int j = k; j <= rows; ++j)
+			for(int j = k; j <= rows; ++j)
 			{
 				matrix[i][j] += koef * matrix[k][j];
 			}
@@ -124,6 +125,7 @@ void SerialParallelGaussMethod(double **matrix, const int rows, double* result)
 		result[k] -= add_param.get_value();
 		result[k] /= matrix[k][k];
 	}
+	return direct_motion_duration.count();
 }
 
 int main()
@@ -131,14 +133,14 @@ int main()
 	srand( (unsigned) time( 0 ) );
 
 	int i;
-	/*
-	const int test_matrix = MATRIX_SIZE;
-	double **test_matrix = new double*[lines];
-	double *result = new double[lines];
+	
+	const int test_matrix_lines = MATRIX_SIZE;
+	double **test_matrix = new double*[test_matrix_lines];
+	double *result = new double[test_matrix_lines];
 	InitMatrix(test_matrix);
-	*/
+	
 
-		
+	/*	
 	// кол-во строк в матрице, приводимой в качестве примера
 	const int test_matrix_lines = 4;
 
@@ -159,24 +161,25 @@ int main()
 	test_matrix[1][0] = 1; test_matrix[1][1] = 3;  test_matrix[1][2] = 2;  test_matrix[1][3] = 1;  test_matrix[1][4] = 11;
 	test_matrix[2][0] = 2; test_matrix[2][1] = 10; test_matrix[2][2] = 9;  test_matrix[2][3] = 7;  test_matrix[2][4] = 40;
 	test_matrix[3][0] = 3; test_matrix[3][1] = 8;  test_matrix[3][2] = 9;  test_matrix[3][3] = 2;  test_matrix[3][4] = 37;
-	
-	SerialGaussMethod(test_matrix, test_matrix_lines, result);
+	*/
+
 	printf("Solution:\n");
 
-	for (i = 0; i < test_matrix_lines; ++i)
+	double methodTime = SerialGaussMethod(test_matrix, test_matrix_lines, result);
+	/*for (i = 0; i < test_matrix_lines; ++i)
 	{
 		printf("x(%d) = %lf\n", i, result[i]);
-	}
-	SerialParallelGaussMethod(test_matrix, test_matrix_lines, result );
+	}*/
 
+	printf("Parallel Solution:\n");
 
-	printf( "Parallel Solution:\n" );
+	double parallelMethodTime = SerialParallelGaussMethod(test_matrix, test_matrix_lines, result );
 
-	for ( i = 0; i < test_matrix_lines; ++i )
+	/*for ( i = 0; i < test_matrix_lines; ++i )
 	{
 		printf( "x(%d) = %lf\n", i, result[i] );
-	}
-
+	}*/
+	printf("Acceleration is %lf\n", methodTime/parallelMethodTime);
 	for (i = 0; i < test_matrix_lines; ++i)
 	{
 		delete[]test_matrix[i];
