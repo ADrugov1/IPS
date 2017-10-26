@@ -21,6 +21,9 @@
   <ItemGroup>
     <ClCompile Include="task_for_lecture3.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram.cd" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{E8F92441-BF9D-41E3-87DB-1C49AFC2FF06}</ProjectGuid>
     <RootNamespace>IPS_Lab_2</RootNamespace>
@@ -32,6 +35,7 @@
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>Intel C++ Compiler 18.0</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
+    <UseMpiLibrary>MPICH2</UseMpiLibrary>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
@@ -39,6 +43,12 @@
     <PlatformToolset>Intel C++ Compiler 18.0</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
+    <UseMpiLibrary>INTELMPI</UseMpiLibrary>
+    <UseIntelIPP>false</UseIntelIPP>
+    <UseIntelMKL>Parallel</UseIntelMKL>
+    <NumberOfCilkThreads>8</NumberOfCilkThreads>
+    <UseIntelTBB>true</UseIntelTBB>
+    <InstrumentIntelTBB>true</InstrumentIntelTBB>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
@@ -99,6 +109,8 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <Parallelization>true</Parallelization>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>

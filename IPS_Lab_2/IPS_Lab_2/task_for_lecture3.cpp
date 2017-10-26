@@ -34,7 +34,7 @@ void InitMatrix( double** matrix )
 /// последний столбей матрицы - значения правых частей уравнений
 /// rows - количество строк в исходной матрице
 /// result - массив ответов СЛАУ
-double SerialGaussMethod( double **matrix, const int rows, double* result )
+double SerialGaussMethod(double **matrix, const int rows, double* result)
 {
 	int k;
 	double koef;
@@ -42,14 +42,14 @@ double SerialGaussMethod( double **matrix, const int rows, double* result )
 	high_resolution_clock::time_point t1 = high_resolution_clock::now();
 
 	// прямой ход метода Гаусса
-	for ( k = 0; k < rows; ++k )
+	for (k = 0; k < rows; ++k)
 	{
 		//
-		for ( int i = k + 1; i < rows; ++i )
+		for (int i = k + 1; i < rows; ++i)
 		{
 			koef = -matrix[i][k] / matrix[k][k];
 
-			for ( int j = k; j <= rows; ++j )
+			for (int j = k; j <= rows; ++j)
 			{
 				matrix[i][j] += koef * matrix[k][j];
 			}
@@ -60,17 +60,15 @@ double SerialGaussMethod( double **matrix, const int rows, double* result )
 
 	duration<double> direct_motion_duration = (t2 - t1);
 
-	cout << "Direct motion duration is: " << direct_motion_duration.count() << " seconds\n" << endl;
-
 	// обратный ход метода Гаусса
 	result[rows - 1] = matrix[rows - 1][rows] / matrix[rows - 1][rows - 1];
 
-	for ( k = rows - 2; k >= 0; --k )
+	for (k = rows - 2; k >= 0; --k)
 	{
 		result[k] = matrix[k][rows];
 
 		//
-		for ( int j = k + 1; j < rows; ++j )
+		for (int j = k + 1; j < rows; ++j)
 		{
 			result[k] -= matrix[k][j] * result[j];
 		}
@@ -81,6 +79,7 @@ double SerialGaussMethod( double **matrix, const int rows, double* result )
 }
 
 
+
 double SerialParallelGaussMethod(double **matrix, const int rows, double* result)
 {
 	int k;
@@ -89,14 +88,14 @@ double SerialParallelGaussMethod(double **matrix, const int rows, double* result
 	high_resolution_clock::time_point t1 = high_resolution_clock::now();
 
 	// прямой ход метода Гаусса
-	for (int k = 0; k < rows; ++k)
+	for (k = 0; k < rows; ++k)
 	{
 		//
-		cilk_for(int i = k + 1; i < rows; ++i)
+		cilk_for (int i = k + 1; i < rows; ++i)
 		{
 			koef = -matrix[i][k] / matrix[k][k];
 
-			for(int j = k; j <= rows; ++j)
+			for (int j = k; j <= rows; ++j)
 			{
 				matrix[i][j] += koef * matrix[k][j];
 			}
@@ -107,8 +106,6 @@ double SerialParallelGaussMethod(double **matrix, const int rows, double* result
 
 	duration<double> direct_motion_duration = (t2 - t1);
 
-	cout << "(Parallel)Direct motion duration is: " << direct_motion_duration.count() << " seconds\n" << endl;
-
 	// обратный ход метода Гаусса
 	result[rows - 1] = matrix[rows - 1][rows] / matrix[rows - 1][rows - 1];
 
@@ -118,73 +115,46 @@ double SerialParallelGaussMethod(double **matrix, const int rows, double* result
 
 		//
 		cilk::reducer_opadd<double> add_param(0.0);
-		cilk_for (int j = k + 1; j < rows; ++j)
+		cilk_for(int j = k + 1; j < rows; ++j)
 		{
 			add_param += matrix[k][j] * result[j];
 		}
 		result[k] -= add_param.get_value();
 		result[k] /= matrix[k][k];
 	}
+
 	return direct_motion_duration.count();
 }
 
 int main()
 {
-	srand( (unsigned) time( 0 ) );
+	srand((unsigned)time(0));
 
 	int i;
-	
-	const int test_matrix_lines = MATRIX_SIZE;
-	double **test_matrix = new double*[test_matrix_lines];
-	double *result = new double[test_matrix_lines];
-	InitMatrix(test_matrix);
-	
 
-	/*	
-	// кол-во строк в матрице, приводимой в качестве примера
-	const int test_matrix_lines = 4;
+	double **matrix = new double*[MATRIX_SIZE];
+	double *result = new double[MATRIX_SIZE];
 
-	double **test_matrix = new double*[test_matrix_lines];
-	// цикл по строкам
-	for ( i = 0; i < test_matrix_lines; ++i )
+	double **parallel_matrix = new double*[MATRIX_SIZE];
+
+	InitMatrix(matrix);
+	InitMatrix(parallel_matrix);
+
+	double algorithmTime = SerialGaussMethod(matrix, MATRIX_SIZE, result);
+	cout << "Algorithm time: " << algorithmTime << " seconds\n" << endl;
+
+	double parallelAlgorithmTime = SerialGaussMethod(parallel_matrix, MATRIX_SIZE, result);
+	cout << "Parallel algorithm time: " << parallelAlgorithmTime << " seconds\n" << endl;
+
+	for (i = 0; i < MATRIX_SIZE; ++i)
 	{
-		// (test_matrix_lines + 1)- количество столбцов в тестовой матрице,
-		// последний столбец матрицы отведен под правые части уравнений, входящих в СЛАУ
-		test_matrix[i] = new double[test_matrix_lines + 1];
+		delete[]matrix[i];
+		delete[]parallel_matrix[i];
+
 	}
 
-	// массив решений СЛАУ
-	double *result = new double[test_matrix_lines];
-	
-	// инициализация тестовой матрицы
-	test_matrix[0][0] = 2; test_matrix[0][1] = 5;  test_matrix[0][2] = 4;  test_matrix[0][3] = 1;  test_matrix[0][4] = 20;
-	test_matrix[1][0] = 1; test_matrix[1][1] = 3;  test_matrix[1][2] = 2;  test_matrix[1][3] = 1;  test_matrix[1][4] = 11;
-	test_matrix[2][0] = 2; test_matrix[2][1] = 10; test_matrix[2][2] = 9;  test_matrix[2][3] = 7;  test_matrix[2][4] = 40;
-	test_matrix[3][0] = 3; test_matrix[3][1] = 8;  test_matrix[3][2] = 9;  test_matrix[3][3] = 2;  test_matrix[3][4] = 37;
-	*/
+	cout << "Acceleration: " << algorithmTime/parallelAlgorithmTime << endl;
 
-	printf("Solution:\n");
-
-	double methodTime = SerialGaussMethod(test_matrix, test_matrix_lines, result);
-	/*for (i = 0; i < test_matrix_lines; ++i)
-	{
-		printf("x(%d) = %lf\n", i, result[i]);
-	}*/
-
-	printf("Parallel Solution:\n");
-
-	double parallelMethodTime = SerialParallelGaussMethod(test_matrix, test_matrix_lines, result );
-
-	/*for ( i = 0; i < test_matrix_lines; ++i )
-	{
-		printf( "x(%d) = %lf\n", i, result[i] );
-	}*/
-	printf("Acceleration is %lf\n", methodTime/parallelMethodTime);
-	for (i = 0; i < test_matrix_lines; ++i)
-	{
-		delete[]test_matrix[i];
-	}
-	
 	delete[] result;
 
 	return 0;
