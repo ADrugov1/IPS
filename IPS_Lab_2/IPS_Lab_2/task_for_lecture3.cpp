@@ -82,18 +82,16 @@ double SerialGaussMethod(double **matrix, const int rows, double* result)
 
 double SerialParallelGaussMethod(double **matrix, const int rows, double* result)
 {
-	int k;
-	double koef;
 
 	high_resolution_clock::time_point t1 = high_resolution_clock::now();
 
 	// прямой ход метода Гаусса
-	for (k = 0; k < rows; ++k)
+	for (int k = 0; k < rows; ++k)
 	{
 		//
 		cilk_for (int i = k + 1; i < rows; ++i)
 		{
-			koef = -matrix[i][k] / matrix[k][k];
+			double koef = -matrix[i][k] / matrix[k][k];
 
 			for (int j = k; j <= rows; ++j)
 			{
@@ -109,7 +107,7 @@ double SerialParallelGaussMethod(double **matrix, const int rows, double* result
 	// обратный ход метода Гаусса
 	result[rows - 1] = matrix[rows - 1][rows] / matrix[rows - 1][rows - 1];
 
-	for (k = rows - 2; k >= 0; --k)
+	for (int k = rows - 2; k >= 0; --k)
 	{
 		result[k] = matrix[k][rows];
 
@@ -135,21 +133,18 @@ int main()
 	double **matrix = new double*[MATRIX_SIZE];
 	double *result = new double[MATRIX_SIZE];
 
-	double **parallel_matrix = new double*[MATRIX_SIZE];
-
 	InitMatrix(matrix);
-	InitMatrix(parallel_matrix);
+
 
 	double algorithmTime = SerialGaussMethod(matrix, MATRIX_SIZE, result);
 	cout << "Algorithm time: " << algorithmTime << " seconds\n" << endl;
 
-	double parallelAlgorithmTime = SerialGaussMethod(parallel_matrix, MATRIX_SIZE, result);
+	double parallelAlgorithmTime = SerialGaussMethod(matrix, MATRIX_SIZE, result);
 	cout << "Parallel algorithm time: " << parallelAlgorithmTime << " seconds\n" << endl;
 
 	for (i = 0; i < MATRIX_SIZE; ++i)
 	{
 		delete[]matrix[i];
-		delete[]parallel_matrix[i];
 
 	}
 
