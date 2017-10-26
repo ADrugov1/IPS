@@ -132,6 +132,7 @@ int main()
 
 	double **matrix = new double*[MATRIX_SIZE];
 	double *result = new double[MATRIX_SIZE];
+	double *parallelResult = new double[MATRIX_SIZE];
 
 	InitMatrix(matrix);
 
@@ -139,7 +140,7 @@ int main()
 	double algorithmTime = SerialGaussMethod(matrix, MATRIX_SIZE, result);
 	cout << "Algorithm time: " << algorithmTime << " seconds\n" << endl;
 
-	double parallelAlgorithmTime = SerialGaussMethod(matrix, MATRIX_SIZE, result);
+	double parallelAlgorithmTime = SerialGaussMethod(matrix, MATRIX_SIZE, parallelResult);
 	cout << "Parallel algorithm time: " << parallelAlgorithmTime << " seconds\n" << endl;
 
 	for (i = 0; i < MATRIX_SIZE; ++i)
@@ -147,10 +148,18 @@ int main()
 		delete[]matrix[i];
 
 	}
+	for (int i = 0; i < MATRIX_SIZE; ++i)
+	{
+		if (fabs(result[i] - parallelResult[i]) >= 0.00000001)
+		{
+			printf("%lf\n", fabs(result[i] - parallelResult[i]));
+		}
+	}
 
 	cout << "Acceleration: " << algorithmTime/parallelAlgorithmTime << endl;
 
 	delete[] result;
+	delete[] parallelResult;
 
 	return 0;
 }
