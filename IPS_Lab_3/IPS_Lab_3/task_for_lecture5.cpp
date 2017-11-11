@@ -57,25 +57,27 @@ void FindAverageValues( eprocess_type proc_type, double** matrix, const size_t n
 		{
 			for ( size_t i = 0; i < numb_rows; ++i )
 			{
-				double sum( 0.0 );
-				for( size_t j = 0; j < numb_cols; ++j )
+				cilk::reducer_opadd<double> sum( 0.0 );
+				cilk_for( size_t j = 0; j < numb_cols; ++j )
 				{
 					sum += matrix[i][j];
 				}
-				average_vals[i] = sum / numb_cols;
+				average_vals[i] = sum.get_value();
+				average_vals[i] = average_vals[i] / numb_cols;
 			}
 			break;
 		}
 		case eprocess_type::by_cols:
 		{
-			for ( size_t j = 0; j < numb_cols; ++j )
+			for ( size_t i = 0; i < numb_cols; ++i )
 			{
-				double sum( 0.0 );
-				for( size_t i = 0; i < numb_rows; ++i )
+				cilk::reducer_opadd<double> sum( 0.0 );
+				cilk_for( size_t j = 0; j < numb_rows; ++j )
 				{
-					sum += matrix[i][j];
+					sum += matrix[j][i];
 				}
-				average_vals[j] = sum / numb_rows;
+				average_vals[i] = sum.get_value();
+				average_vals[i] = average_vals[i] / numb_rows;
 			}
 			break;
 		}
@@ -133,8 +135,8 @@ int main()
 	{
 		srand( (unsigned) time( 0 ) );
 
-		const size_t numb_rows = 2;
-		const size_t numb_cols = 3;
+		const size_t numb_rows = 100;
+		const size_t numb_cols = 100;
 
 		double** matrix = new double*[numb_rows];
 		for ( size_t i = 0; i < numb_rows; ++i )
@@ -147,7 +149,7 @@ int main()
 
 		InitMatrix( matrix, numb_rows, numb_cols );
 
-		PrintMatrix( matrix, numb_rows, numb_cols );
+		////PrintMatrix( matrix, numb_rows, numb_cols );
 
 		std::thread first_thr( FindAverageValues, eprocess_type::by_rows, matrix, numb_rows, numb_cols, average_vals_in_rows );
 		std::thread second_thr( FindAverageValues, eprocess_type::by_cols, matrix, numb_rows, numb_cols, average_vals_in_cols );
@@ -155,8 +157,22 @@ int main()
 		first_thr.join();
 		second_thr.join();
 
-		PrintAverageVals( eprocess_type::by_rows, average_vals_in_rows, numb_rows );
-		PrintAverageVals( eprocess_type::by_cols, average_vals_in_cols, numb_cols );
+		int i;
+
+		for (i = 0; i < numb_rows; ++i)
+		{
+			delete[] matrix[i];
+
+		}
+
+		delete[] matrix;
+
+		////PrintAverageVals( eprocess_type::by_rows, average_vals_in_rows, numb_rows );
+		////PrintAverageVals( eprocess_type::by_cols, average_vals_in_cols, numb_cols );
+
+		delete[] average_vals_in_rows;
+		delete[] average_vals_in_cols;
+
 	}
 	catch ( std::exception& except )
 	{
